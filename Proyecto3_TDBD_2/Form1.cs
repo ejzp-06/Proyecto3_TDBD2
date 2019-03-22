@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -154,7 +154,29 @@ namespace Proyecto3_TDBD_2
                 string hexValue = decValue.ToString("X");
                 return hexValue;
             }
+        }
 
+        [SQLiteFunction(Name = "PMT",Arguments = 3, FuncType =FunctionType.Scalar)]
+        class PMT : SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                var rate = Convert.ToDouble(args[0].ToString()) / 100 / 12;
+                var denominator = Math.Pow((1 + rate), Convert.ToInt32(args[1].ToString()));
+                return (rate + (rate / denominator)) * Convert.ToInt32(args[1].ToString());
+            }
+        }
+
+        [SQLiteFunction (Name ="Trim",Arguments =2, FuncType = FunctionType.Scalar)]
+        class Trim: SQLiteFunction
+        {
+            public override object Invoke(object[] args)
+            {
+                char string1 = Convert.ToChar(args[1].ToString());
+                string string2 = args[0].ToString();
+                string result = string2.Trim(string1);
+                return result;
+            }
         }
 
         [SQLiteFunction(Name = "HEX2DEC", Arguments = 1, FuncType = FunctionType.Scalar)]
